@@ -79,6 +79,7 @@ def show_song(song_id):
 def add_song():
     new_song = Song()
     form = SongForm(obj=new_song)
+    
     if form.validate_on_submit():
         form.populate_obj(new_song)
         db.session.add(new_song)
@@ -93,13 +94,15 @@ def add_song_to_playlist(playlist_id):
     playlist = Playlist.query.get(playlist_id)
     form = NewSongForPlaylistForm()
     form.playlist.choices = [(playlist.name, playlist.name) ]
-    form.song.choices = [(song.title, song.title) for song in Song.query.all()]
+    form.song.choices = [(song.title, song.title) for song in Song.query.all() if song not in playlist.songs]
+
     if form.validate_on_submit():
         add_song = PlaylistSong(playlist=playlist_id, song=Song.query.filter_by(title=form.song.data).one().id)
         db.session.add(add_song)
         db.session.commit()
         print(add_song,'********************')
         return redirect('/')
+        
     return render_template("add_song_to_playlist.html",
                              playlist=playlist,
                              form=form)

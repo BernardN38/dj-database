@@ -1,6 +1,5 @@
 """Forms for playlist app."""
 
-from typing_extensions import Required
 from wtforms import StringField, SelectField, validators
 from flask_wtf import FlaskForm
 from wtforms_alchemy import model_form_factory
@@ -22,5 +21,5 @@ class SongForm(ModelForm):
         model = Song
 
 class NewSongForPlaylistForm(FlaskForm):
-    playlist = SelectField('Playlist Name', validators=[Required()])
-    song = SelectField('Song Name', validators=[Required()])
+    playlist = SelectField('Playlist Name', validators=[validators.Required()])
+    song = SelectField('Song Name', validators=[validators.Required()])
